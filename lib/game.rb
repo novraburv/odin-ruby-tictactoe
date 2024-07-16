@@ -17,14 +17,12 @@ class Game
 
   def start
     loop do
-      return display_no_move if @b0.full?
-
       change_player
-      display_board
+      display_turn
       receive_player_input
       next unless evaluate
 
-      return display_winner
+      return
     end
   end
 
@@ -39,28 +37,39 @@ class Game
   def display_board
     system 'clear'
     @b0.display
+  end
+
+  def display_turn
+    display_board
     puts "#{@current_player.name}, your turn"
     puts "Here's your available moves: #{@b0.list_empty}"
   end
 
   def display_no_move
-    system 'clear'
-    @b0.display
+    display_board
     puts 'TIE! the board is full'
     puts 'no possible move'
   end
 
-  def display_winner
-    system 'clear'
-    @b0.display
-    puts "#{@current_player.name} wins! \"#{@current_player.icon}\" streak on cell #{evaluate.split('').map(&:to_i)}".colorize(:yellow)
+  def display_winner(streak)
+    display_board
+    puts "#{@current_player.name} wins! \"#{@current_player.icon}\" streak on cell #{streak.split('').map(&:to_i)}"
+      .colorize(:yellow)
   end
 
   def evaluate
+    # evaluate winning combinations
     WINNING_COMBINATION.each do |comb|
-      return comb if comb.split('').all? { |index| @current_player.moves.include?(index.to_i) }
+      if comb.split('').all? { |index| @current_player.moves.include?(index.to_i) }
+        display_winner(comb)
+        return true
+      end
     end
-    false
+    # evaluate if board is full
+    return unless @b0.full?
+
+    display_no_move
+    true
   end
 
   def change_player
