@@ -34,25 +34,20 @@ class Game
     @current_player.record_moves(player_input)
   end
 
-  def display_board
-    system 'clear'
-    @b0.display
-  end
-
   def display_turn
-    display_board
+    @b0.display
     puts "#{@current_player.name}, your turn"
     puts "Here's your available moves: #{@b0.list_empty}"
   end
 
   def display_no_move
-    display_board
+    @b0.display
     puts 'TIE! the board is full'
     puts 'no possible move'
   end
 
   def display_winner(streak)
-    display_board
+    @b0.display
     puts "#{@current_player.name} wins! \"#{@current_player.icon}\" streak on cell #{streak.split('').map(&:to_i)}"
       .colorize(:yellow)
   end

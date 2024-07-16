@@ -11,6 +11,7 @@ class Board
   end
 
   def display # rubocop:disable Metrics/AbcSize
+    system 'clear'
     puts SEPARATOR
     puts "| #{show_nil(array[0])} | #{show_nil(array[1])} | #{show_nil(array[2])} |"
     puts SEPARATOR
